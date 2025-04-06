@@ -240,10 +240,13 @@
 
 
 import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Search from "./components/Search";
 import Spinners from "./components/Spinners";
 import MovieCard from "./components/MovieCard";
+import MovieDetail from "./components/MovieDetail";
 import Navbar from "./components/navbar";
+import MainLayout from './layouts/MainLayout';
 import { useDebounce } from "react-use";
 import {
   updateSearchCount,
@@ -251,14 +254,15 @@ import {
   saveMovie,
   getSavedMovies,
   deleteSavedMovie
-} from './appwrite';
+} from "./appwrite";
 
-const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 const API_OPTIONS = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    accept: 'application/json',
+    accept: "application/json",
     Authorization: `Bearer ${API_KEY}`
   }
 };
@@ -434,57 +438,79 @@ const App = () => {
       <div className="pattern">
         <div className="wrapper">
           <Navbar currentView={currentView} setCurrentView={setCurrentView} />
-
-          {currentView === 'home' && (
-            <header>
-              <img src="./Watchlyst.png" alt="Hero Banner" />
-              <h1>Find What to <span className="text-gradient">Watch</span>, Then Enjoy the Best <span className="text-gradient">Movies</span></h1>
-              <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            </header>
-          )}
-
-          {currentView === 'home' && trendingMovies.length > 0 && (
-            <section className="trending">
-              <h2>Trending Movies</h2>
-              <ul>
-                {trendingMovies.map((movie, index) => (
-                  <li key={movie.$id}>
-                    <p>{index + 1}</p>
-                    <img src={movie.poster_url} alt={movie.title} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          <section className="all-movies">
-            <h2>
-              {currentView === 'home' && 'All Movies'}
-              {currentView === 'top' && 'Top 100 Rated Movies'}
-              {currentView === 'saved' && 'Saved Movies'}
-            </h2>
-
-            {isLoading ? (
-              <Spinners />
-            ) : errorMessage ? (
-              <p className="text-red-500">{errorMessage}</p>
-            ) : movieList.length === 0 ? (
-              <p className="text-gray-500">No movies to display.</p>
-            ) : (
-              <ul>
-                {movieList.map((movie) => (
-                  <MovieCard
-                    key={movie.id || movie.$id}
-                    movie={movie}
-                    onSave={() => handleSaveMovie(movie)}
-                    onDelete={() => handleDeleteMovie(movie.$id)}
-                    isSaved={isMovieSaved(movie)}
-                    showDelete={currentView === 'saved'}
-                  />
-                ))}
-              </ul>
-            )}
-          </section>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  {currentView === 'home' && (
+                    <header>
+                      <img src="./Watchlyst.png" alt="Hero Banner" />
+                      <h1>
+                        Find What to <span className="text-gradient">Watch</span>, Then Enjoy the Best{' '}
+                        <span className="text-gradient">Movies</span>
+                      </h1>
+                      <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                    </header>
+                  )}
+  
+                  {currentView === 'home' && trendingMovies.length > 0 && (
+                    <section className="trending">
+                      <h2>Trending Movies</h2>
+                      <ul>
+                        {trendingMovies.map((movie, index) => (
+                          <li key={movie.$id}>
+                            <p>{index + 1}</p>
+                            <img src={movie.poster_url} alt={movie.title} />
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+  
+                  <section className="all-movies">
+                    <h2>
+                      {currentView === 'home' && 'All Movies'}
+                      {currentView === 'top' && 'Top 100 Rated Movies'}
+                      {currentView === 'saved' && 'Saved Movies'}
+                    </h2>
+  
+                    {isLoading ? (
+                      <Spinners />
+                    ) : errorMessage ? (
+                      <p className="text-red-500">{errorMessage}</p>
+                    ) : movieList.length === 0 ? (
+                      <p className="text-gray-500">No movies to display.</p>
+                    ) : (
+                      <ul>
+                        {movieList.map((movie) => (
+                          <MovieCard
+                            key={movie.id || movie.$id}
+                            movie={movie}
+                            onSave={() => handleSaveMovie(movie)}
+                            onDelete={() => handleDeleteMovie(movie.$id)}
+                            isSaved={isMovieSaved(movie)}
+                            showDelete={currentView === 'saved'}
+                          />
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                </>
+              }
+            />
+  
+            <Route
+              path="/movie/:id"
+              element={
+                <div className="pattern">
+                  <div className="wrapper">
+                    <MovieDetail />
+                  </div>
+                </div>
+              }
+            />
+          </Routes>
         </div>
       </div>
     </main>
@@ -492,4 +518,3 @@ const App = () => {
 };
 
 export default App;
-
