@@ -313,9 +313,6 @@ export const deleteSavedMovie = async (documentId) => {
   }
 };
 
-// ==============================================
-// 7. EXPORT FUNGSI UTAMA
-// ==============================================
 
 export default {
   updateSearchCount,
