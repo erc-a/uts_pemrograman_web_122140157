@@ -11,12 +11,8 @@
     ],
     "routes": [
       {
-        "src": "/.*",
-        "dest": "/index.html"
+        "src": "/(.*)",
+        "dest": "/dist/$1"
       }
-    ],
-    "env": {
-      "NODE_ENV": "production"
-    }
+    ]
   }
-  
