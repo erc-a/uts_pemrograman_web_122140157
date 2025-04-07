@@ -173,7 +173,8 @@
     background: linear-gradient(90deg, #FF7A7A 0%, #B80000 100%);
     color: black;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }  
+  }
+  
 }
 
 @utility text-gradient {
