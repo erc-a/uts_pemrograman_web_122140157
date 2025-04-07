@@ -5041,5 +5041,8 @@
         "url": "https://github.com/sponsors/sindresorhus"
       }
     }
+  },
+  "devDependencies": {
+    "vite": "^6.2.5"
   }
 }
